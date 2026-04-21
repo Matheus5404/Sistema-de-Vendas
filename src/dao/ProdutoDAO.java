@@ -7,7 +7,7 @@ import java.util.List;
 
 public class ProdutoDAO {
 
-    public void inserir(Produto p) {
+    public void salvar(Produto p) {
         String sql = "INSERT INTO produto(nome, valor) VALUES (?, ?)";
 
         try (Connection conn = Conexao.conectar();
@@ -22,7 +22,7 @@ public class ProdutoDAO {
         }
     }
 
-    public void atualizar(Produto p) {
+    public void alterar(Produto p) {
         String sql = "UPDATE produto SET nome = ?, valor = ? WHERE id = ?";
 
         try (Connection conn = Conexao.conectar();
@@ -98,4 +98,14 @@ public class ProdutoDAO {
 
         return p;
     }
+
+    // Métodos de compatibilidade
+    public void inserir(Produto p) {
+        salvar(p);
+    }
+
+    public void atualizar(Produto p) {
+        alterar(p);
+    }
+
 }
