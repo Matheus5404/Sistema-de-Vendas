@@ -7,17 +7,17 @@ import java.util.List;
 
 public class ClienteDAO {
 
-    public void inserir(Cliente c) {
+    public boolean inserir(Cliente c) {
         String sql = "INSERT INTO cliente(nome) VALUES (?)";
 
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, c.getNome());
-            stmt.executeUpdate();
+            return stmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            System.out.println("Erro ao inserir cliente: " + e.getMessage());
+            throw new RuntimeException("Erro ao inserir cliente: " + e.getMessage(), e);
         }
     }
 
@@ -37,7 +37,7 @@ public class ClienteDAO {
             }
 
         } catch (SQLException e) {
-            System.out.println("Erro ao listar clientes: " + e.getMessage());
+            throw new RuntimeException("Erro ao listar clientes: " + e.getMessage(), e);
         }
 
         return lista;

@@ -5,9 +5,18 @@
  */
 package view;
 
+import dao.ClienteDAO;
+import dao.ItemNotaFiscalDAO;
 import dao.NotaFiscalDAO;
+import dao.ProdutoDAO;
+import java.time.LocalDate;
+import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import model.Cliente;
+import model.ItemNotaFiscal;
 import model.NotaFiscal;
+import model.Produto;
 
 /**
  *
@@ -20,6 +29,56 @@ public class FrmNotaFiscal extends javax.swing.JFrame {
      */
     public FrmNotaFiscal() {
         initComponents();
+        configurarEventos();
+        carregarClientes();
+        carregarProdutos();
+        inicializarFormulario();
+    }
+
+    private void configurarEventos() {
+        AdicionarItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AdicionarItemActionPerformed(evt);
+            }
+        });
+
+        finalizarNF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                finalizarNFActionPerformed(evt);
+            }
+        });
+
+        comboProduto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                atualizarValorProdutoSelecionado();
+            }
+        });
+    }
+
+    private void inicializarFormulario() {
+        txtDataEmissaoNf.setText(LocalDate.now().toString());
+        txtSubtotal.setText("0.00");
+        txtTotalNf.setText("0.00");
+        valorUnitario.setText("0.00");
+        txtQuantidade.setValue(1);
+        atualizarTabelaItens();
+    }
+
+    private void carregarClientes() {
+        comboCliente.removeAllItems();
+        List<Cliente> clientes = new ClienteDAO().listar();
+        for (Cliente c : clientes) {
+            comboCliente.addItem(c.getId() + " - " + c.getNome());
+        }
+    }
+
+    private void carregarProdutos() {
+        comboProduto.removeAllItems();
+        List<Produto> produtos = new ProdutoDAO().listar();
+        for (Produto p : produtos) {
+            comboProduto.addItem(p.getId() + " - " + p.getNome());
+        }
+        atualizarValorProdutoSelecionado();
     }
 
     /**
@@ -235,18 +294,154 @@ public class FrmNotaFiscal extends javax.swing.JFrame {
 
     private int nfAtual = -1;
     private double totalNota = 0;
+
+    private int extrairIdSelecionado(Object selecionado, String mensagemErro) {
+        if (selecionado == null) {
+            throw new IllegalArgumentException(mensagemErro);
+        }
+
+        String texto = selecionado.toString().trim();
+        if (texto.isEmpty()) {
+            throw new IllegalArgumentException(mensagemErro);
+        }
+
+        // Aceita formato "1", "1 - Nome" ou "1: Nome"
+        String idTexto = texto.split("[^0-9]", 2)[0];
+        if (idTexto.isEmpty()) {
+            throw new IllegalArgumentException(mensagemErro);
+        }
+        return Integer.parseInt(idTexto);
+    }
+
+    private int obterIdClienteSelecionado() {
+        return extrairIdSelecionado(comboCliente.getSelectedItem(), "Selecione um cliente válido.");
+    }
+
+    private int obterIdProdutoSelecionado() {
+        return extrairIdSelecionado(comboProduto.getSelectedItem(), "Selecione um produto válido.");
+    }
+
+    private Produto obterProdutoSelecionado() {
+        int idProduto = obterIdProdutoSelecionado();
+        Produto produto = new ProdutoDAO().buscarPorId(idProduto);
+        if (produto == null) {
+            throw new IllegalArgumentException("Produto não encontrado no banco de dados.");
+        }
+        return produto;
+    }
+
+    private void atualizarValorProdutoSelecionado() {
+        try {
+            if (comboProduto.getSelectedItem() == null) {
+                return;
+            }
+            Produto produto = obterProdutoSelecionado();
+            valorUnitario.setText(String.format(java.util.Locale.US, "%.2f", produto.getValor()));
+            atualizarSubtotal();
+        } catch (Exception e) {
+            // evita quebrar a carga inicial da tela caso não haja produtos
+        }
+    }
+
+    private void atualizarSubtotal() {
+        try {
+            int quantidade = Integer.parseInt(txtQuantidade.getValue().toString());
+            double valor = Double.parseDouble(valorUnitario.getText().trim().replace(",", "."));
+            txtSubtotal.setText(String.format(java.util.Locale.US, "%.2f", quantidade * valor));
+        } catch (Exception e) {
+            txtSubtotal.setText("0.00");
+        }
+    }
+
+    private void atualizarTabelaItens() {
+        DefaultTableModel model = (DefaultTableModel) tabelaEmissaoNf.getModel();
+        model.setRowCount(0);
+    }
     
     private void CriarNFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CriarNFActionPerformed
-        NotaFiscal nf = new NotaFiscal();
-        nf.setFkCliente(Integer.parseInt(txtIdCliente.getText()));
-        nf.setDataEmissao(java.sql.Date.valueOf(txtData.getText())); // formato: yyyy-MM-dd
-        nf.setValorTotal(0);
-    
-        NotaFiscalDAO dao = new NotaFiscalDAO();
-        nfAtual = dao.inserir(nf);
+        try {
+            NotaFiscal nf = new NotaFiscal();
+            nf.setFkCliente(obterIdClienteSelecionado());
+            nf.setDataEmissao(java.sql.Date.valueOf(txtDataEmissaoNf.getText().trim())); // formato: yyyy-MM-dd
+            nf.setValorTotal(0);
 
-        JOptionPane.showMessageDialog(this, "NF criada com código: " + nfAtual);
+            NotaFiscalDAO dao = new NotaFiscalDAO();
+            nfAtual = dao.inserir(nf);
+
+            if (nfAtual > 0) {
+                totalNota = 0;
+                txtTotalNf.setText("0.00");
+                atualizarTabelaItens();
+                JOptionPane.showMessageDialog(this, "NF criada com código: " + nfAtual);
+            } else {
+                JOptionPane.showMessageDialog(this, "Não foi possível criar a NF.");
+            }
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this, "Dados inválidos: " + e.getMessage());
+        }
     }//GEN-LAST:event_CriarNFActionPerformed
+
+    private void AdicionarItemActionPerformed(java.awt.event.ActionEvent evt) {
+        if (nfAtual <= 0) {
+            JOptionPane.showMessageDialog(this, "Crie a NF antes de adicionar itens.");
+            return;
+        }
+
+        try {
+            Produto produto = obterProdutoSelecionado();
+            int quantidade = Integer.parseInt(txtQuantidade.getValue().toString());
+            if (quantidade <= 0) {
+                throw new IllegalArgumentException("Quantidade deve ser maior que zero.");
+            }
+
+            double unitario = produto.getValor();
+            double subtotal = unitario * quantidade;
+
+            ItemNotaFiscal item = new ItemNotaFiscal();
+            item.setFkNf(nfAtual);
+            item.setFkProd(produto.getId());
+            item.setQuantidade(quantidade);
+            item.setValorUnitario(unitario);
+            item.setSubtotal(subtotal);
+
+            new ItemNotaFiscalDAO().inserir(item);
+
+            DefaultTableModel model = (DefaultTableModel) tabelaEmissaoNf.getModel();
+            model.addRow(new Object[]{
+                model.getRowCount() + 1,
+                produto.getNome(),
+                quantidade,
+                String.format(java.util.Locale.US, "%.2f", unitario),
+                String.format(java.util.Locale.US, "%.2f", subtotal)
+            });
+
+            totalNota += subtotal;
+            txtSubtotal.setText(String.format(java.util.Locale.US, "%.2f", subtotal));
+            txtTotalNf.setText(String.format(java.util.Locale.US, "%.2f", totalNota));
+            txtQuantidade.setValue(1);
+
+            JOptionPane.showMessageDialog(this, "Item adicionado e salvo no banco.");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao adicionar item: " + e.getMessage());
+        }
+    }
+
+    private void finalizarNFActionPerformed(java.awt.event.ActionEvent evt) {
+        if (nfAtual <= 0) {
+            JOptionPane.showMessageDialog(this, "Nenhuma NF foi criada.");
+            return;
+        }
+
+        try {
+            new NotaFiscalDAO().atualizarTotal(nfAtual, totalNota);
+            JOptionPane.showMessageDialog(this, "NF finalizada com total R$ " + String.format(java.util.Locale.US, "%.2f", totalNota));
+            nfAtual = -1;
+            totalNota = 0;
+            txtTotalNf.setText("0.00");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao finalizar NF: " + e.getMessage());
+        }
+    }
 
     /**
      * @param args the command line arguments

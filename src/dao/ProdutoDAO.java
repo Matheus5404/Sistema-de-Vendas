@@ -7,7 +7,7 @@ import java.util.List;
 
 public class ProdutoDAO {
 
-    public void inserir(Produto p) {
+    public void salvar(Produto p) {
         String sql = "INSERT INTO produto(nome, valor) VALUES (?, ?)";
 
         try (Connection conn = Conexao.conectar();
@@ -18,11 +18,11 @@ public class ProdutoDAO {
             stmt.executeUpdate();
 
         } catch (SQLException e) {
-            System.out.println("Erro ao inserir produto: " + e.getMessage());
+            throw new RuntimeException("Erro ao inserir produto: " + e.getMessage(), e);
         }
     }
 
-    public void atualizar(Produto p) {
+    public void alterar(Produto p) {
         String sql = "UPDATE produto SET nome = ?, valor = ? WHERE id = ?";
 
         try (Connection conn = Conexao.conectar();
@@ -34,7 +34,7 @@ public class ProdutoDAO {
             stmt.executeUpdate();
 
         } catch (SQLException e) {
-            System.out.println("Erro ao atualizar produto: " + e.getMessage());
+            throw new RuntimeException("Erro ao atualizar produto: " + e.getMessage(), e);
         }
     }
 
@@ -48,7 +48,7 @@ public class ProdutoDAO {
             stmt.executeUpdate();
 
         } catch (SQLException e) {
-            System.out.println("Erro ao excluir produto: " + e.getMessage());
+            throw new RuntimeException("Erro ao excluir produto: " + e.getMessage(), e);
         }
     }
 
@@ -69,7 +69,7 @@ public class ProdutoDAO {
             }
 
         } catch (SQLException e) {
-            System.out.println("Erro ao listar produtos: " + e.getMessage());
+            throw new RuntimeException("Erro ao listar produtos: " + e.getMessage(), e);
         }
 
         return lista;
@@ -93,9 +93,19 @@ public class ProdutoDAO {
             }
 
         } catch (SQLException e) {
-            System.out.println("Erro ao buscar produto: " + e.getMessage());
+            throw new RuntimeException("Erro ao buscar produto: " + e.getMessage(), e);
         }
 
         return p;
     }
+
+    // Métodos de compatibilidade
+    public void inserir(Produto p) {
+        salvar(p);
+    }
+
+    public void atualizar(Produto p) {
+        alterar(p);
+    }
+
 }

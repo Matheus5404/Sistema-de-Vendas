@@ -6,6 +6,9 @@
 package view;
 
 import dao.ClienteDAO;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import model.Cliente;
 
 /**
@@ -19,6 +22,52 @@ public class FrmCliente extends javax.swing.JFrame {
      */
     public FrmCliente() {
         initComponents();
+        configurarEventos();
+        limparCampos();
+        preencherTabela();
+    }
+
+    private void configurarEventos() {
+        btnNovoCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                limparCampos();
+            }
+        });
+
+        btnListarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                preencherTabela();
+            }
+        });
+
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int linha = jTable1.getSelectedRow();
+                if (linha >= 0) {
+                    txtIdCliente.setText(jTable1.getValueAt(linha, 0).toString());
+                    txtNomeCliente.setText(jTable1.getValueAt(linha, 1).toString());
+                }
+            }
+        });
+    }
+
+    private void limparCampos() {
+        txtIdCliente.setText("");
+        txtNomeCliente.setText("");
+        txtNomeCliente.requestFocus();
+    }
+
+    private void preencherTabela() {
+        ClienteDAO dao = new ClienteDAO();
+        List<Cliente> clientes = dao.listar();
+
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0);
+
+        for (Cliente cliente : clientes) {
+            model.addRow(new Object[]{cliente.getId(), cliente.getNome()});
+        }
     }
 
     /**
@@ -133,13 +182,29 @@ public class FrmCliente extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSalvarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarClienteActionPerformed
+        String nome = txtNomeCliente.getText().trim();
+        if (nome.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Informe o nome do cliente.");
+            return;
+        }
+
         Cliente c = new Cliente();
-        c.setNome(txtNomeCliente.getText());
+        c.setNome(nome);
 
-        ClienteDAO dao = new ClienteDAO();
-        dao.inserir(c);
+        try {
+            ClienteDAO dao = new ClienteDAO();
+            boolean inseriu = dao.inserir(c);
 
-        javax.swing.JOptionPane.showMessageDialog(this, "Cliente cadastrado com sucesso!");
+            if (inseriu) {
+                JOptionPane.showMessageDialog(this, "Cliente cadastrado com sucesso!");
+                limparCampos();
+                preencherTabela();
+            } else {
+                JOptionPane.showMessageDialog(this, "Não foi possível cadastrar o cliente.");
+            }
+        } catch (RuntimeException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
     }//GEN-LAST:event_btnSalvarClienteActionPerformed
 
     /**
