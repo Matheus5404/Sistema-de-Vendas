@@ -235,17 +235,44 @@ public class FrmNotaFiscal extends javax.swing.JFrame {
 
     private int nfAtual = -1;
     private double totalNota = 0;
+
+    private int obterIdClienteSelecionado() {
+        Object selecionado = comboCliente.getSelectedItem();
+        if (selecionado == null) {
+            throw new IllegalArgumentException("Selecione um cliente.");
+        }
+
+        String texto = selecionado.toString().trim();
+        if (texto.isEmpty()) {
+            throw new IllegalArgumentException("Selecione um cliente válido.");
+        }
+
+        // Aceita formato "1", "1 - Nome" ou "1: Nome"
+        String idTexto = texto.split("[^0-9]", 2)[0];
+        if (idTexto.isEmpty()) {
+            throw new IllegalArgumentException("Não foi possível identificar o ID do cliente selecionado.");
+        }
+        return Integer.parseInt(idTexto);
+    }
     
     private void CriarNFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CriarNFActionPerformed
-        NotaFiscal nf = new NotaFiscal();
-        nf.setFkCliente(Integer.parseInt(txtIdCliente.getText()));
-        nf.setDataEmissao(java.sql.Date.valueOf(txtData.getText())); // formato: yyyy-MM-dd
-        nf.setValorTotal(0);
-    
-        NotaFiscalDAO dao = new NotaFiscalDAO();
-        nfAtual = dao.inserir(nf);
+        try {
+            NotaFiscal nf = new NotaFiscal();
+            nf.setFkCliente(obterIdClienteSelecionado());
+            nf.setDataEmissao(java.sql.Date.valueOf(txtDataEmissaoNf.getText().trim())); // formato: yyyy-MM-dd
+            nf.setValorTotal(0);
 
-        JOptionPane.showMessageDialog(this, "NF criada com código: " + nfAtual);
+            NotaFiscalDAO dao = new NotaFiscalDAO();
+            nfAtual = dao.inserir(nf);
+
+            if (nfAtual > 0) {
+                JOptionPane.showMessageDialog(this, "NF criada com código: " + nfAtual);
+            } else {
+                JOptionPane.showMessageDialog(this, "Não foi possível criar a NF.");
+            }
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this, "Dados inválidos: " + e.getMessage());
+        }
     }//GEN-LAST:event_CriarNFActionPerformed
 
     /**
