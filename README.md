@@ -15,6 +15,8 @@ Este projeto foi desenvolvido com o objetivo de aplicar conceitos de:
 
 Um sistema, no contexto da computação, é um conjunto de componentes interligados que trabalham juntos para atingir um objetivo comum :contentReference[oaicite:0]{index=0} — neste caso, o controle de vendas e emissão de notas fiscais.
 
+
+
 ---
 
 ## ⚙️ Tecnologias Utilizadas
