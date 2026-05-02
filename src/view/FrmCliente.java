@@ -6,6 +6,9 @@
 package view;
 
 import dao.ClienteDAO;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import model.Cliente;
 
 /**
@@ -19,6 +22,8 @@ public class FrmCliente extends javax.swing.JFrame {
      */
     public FrmCliente() {
         initComponents();
+        preencherTabela();
+        limparCampos();
     }
 
     /**
@@ -41,6 +46,8 @@ public class FrmCliente extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        btnAlterarCliente = new javax.swing.JButton();
+        btnExcluirCliente = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -52,6 +59,11 @@ public class FrmCliente extends javax.swing.JFrame {
         jLabel3.setText("Nome:");
 
         btnNovoCliente.setText("Novo");
+        btnNovoCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNovoClienteActionPerformed(evt);
+            }
+        });
 
         btnSalvarCliente.setText("Salvar");
         btnSalvarCliente.addActionListener(new java.awt.event.ActionListener() {
@@ -61,6 +73,11 @@ public class FrmCliente extends javax.swing.JFrame {
         });
 
         btnListarCliente.setText("Listar");
+        btnListarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListarClienteActionPerformed(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel5.setText("Lista de Clientes");
@@ -78,6 +95,20 @@ public class FrmCliente extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
+        btnAlterarCliente.setText("Alterar");
+        btnAlterarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlterarClienteActionPerformed(evt);
+            }
+        });
+
+        btnExcluirCliente.setText("Excluir");
+        btnExcluirCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirClienteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -91,7 +122,11 @@ public class FrmCliente extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(btnSalvarCliente)
                         .addGap(18, 18, 18)
-                        .addComponent(btnListarCliente))
+                        .addComponent(btnListarCliente)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnAlterarCliente)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnExcluirCliente))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -121,7 +156,9 @@ public class FrmCliente extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnNovoCliente)
                     .addComponent(btnSalvarCliente)
-                    .addComponent(btnListarCliente))
+                    .addComponent(btnListarCliente)
+                    .addComponent(btnAlterarCliente)
+                    .addComponent(btnExcluirCliente))
                 .addGap(36, 36, 36)
                 .addComponent(jLabel5)
                 .addGap(18, 18, 18)
@@ -141,6 +178,80 @@ public class FrmCliente extends javax.swing.JFrame {
 
         javax.swing.JOptionPane.showMessageDialog(this, "Cliente cadastrado com sucesso!");
     }//GEN-LAST:event_btnSalvarClienteActionPerformed
+
+    private void btnNovoClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoClienteActionPerformed
+        txtIdCliente.setText("");
+        txtNomeCliente.setText("");
+        txtNomeCliente.requestFocus();
+    }//GEN-LAST:event_btnNovoClienteActionPerformed
+
+    private void btnListarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarClienteActionPerformed
+        preencherTabela();
+    }//GEN-LAST:event_btnListarClienteActionPerformed
+
+    private void btnAlterarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarClienteActionPerformed
+        try {
+            if (txtIdCliente.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Informe o ID do cliente para alterar.");
+                return;
+            }
+
+            if (txtNomeCliente.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Informe o nome do cliente.");
+                return;
+            }
+
+            Cliente c = new Cliente();
+            c.setId(Integer.parseInt(txtIdCliente.getText()));
+            c.setNome(txtNomeCliente.getText());
+
+            ClienteDAO dao = new ClienteDAO();
+            dao.alterar(c);
+
+            JOptionPane.showMessageDialog(this, "Cliente alterado com sucesso!");
+            limparCampos();
+            preencherTabela();
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "ID inválido. Informe um número válido.");
+        }
+    }//GEN-LAST:event_btnAlterarClienteActionPerformed
+
+    private void btnExcluirClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirClienteActionPerformed
+        try {
+            String idTexto = txtIdCliente.getText().trim();
+
+            if (idTexto.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Informe o ID do cliente para exclusão.");
+                return;
+            }
+
+            int confirmacao = JOptionPane.showConfirmDialog(
+                    this,
+                    "Deseja realmente excluir este cliente?",
+                    "Confirmação",
+                    JOptionPane.YES_NO_OPTION
+            );
+
+            if (confirmacao == JOptionPane.YES_OPTION) {
+                ClienteDAO dao = new ClienteDAO();
+                dao.excluir(Integer.parseInt(idTexto));
+
+                JOptionPane.showMessageDialog(this, "Cliente excluído com sucesso!");
+                limparCampos();
+                preencherTabela();
+            }
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "ID inválido. Informe um número válido.");
+        }
+    }//GEN-LAST:event_btnExcluirClienteActionPerformed
+
+    private void limparCampos() {
+        txtIdCliente.setText("");
+        txtNomeCliente.setText("");
+        txtNomeCliente.requestFocus();
+    }
 
     /**
      * @param args the command line arguments
@@ -177,7 +288,22 @@ public class FrmCliente extends javax.swing.JFrame {
         });
     }
 
+    private void preencherTabela() {
+        ClienteDAO dao = new ClienteDAO();
+        List<Cliente> clientes = dao.listar();
+
+        DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
+        modelo.setRowCount(0);
+
+        for (Cliente c : clientes) {
+            Object[] linha = {c.getId(), c.getNome()};
+            modelo.addRow(linha);
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAlterarCliente;
+    private javax.swing.JButton btnExcluirCliente;
     private javax.swing.JButton btnListarCliente;
     private javax.swing.JButton btnNovoCliente;
     private javax.swing.JButton btnSalvarCliente;

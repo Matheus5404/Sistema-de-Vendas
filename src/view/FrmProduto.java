@@ -146,6 +146,11 @@ public class FrmProduto extends javax.swing.JFrame {
         jLabel4.setText("Valor:");
 
         btnNovoProduto.setText("Novo");
+        btnNovoProduto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNovoProdutoActionPerformed(evt);
+            }
+        });
 
         btnSalvarProduto.setText("Salvar");
         btnSalvarProduto.addActionListener(new java.awt.event.ActionListener() {
@@ -162,27 +167,15 @@ public class FrmProduto extends javax.swing.JFrame {
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
                 "ID", "Nome", "Valor"
             }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Double.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+        ));
         jScrollPane2.setViewportView(jTable2);
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -283,9 +276,9 @@ public class FrmProduto extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnSalvarProdutoActionPerformed
 
-    private void btnNovoProdutoActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnNovoProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoProdutoActionPerformed
         limparCampos();
-    }
+    }//GEN-LAST:event_btnNovoProdutoActionPerformed
 
     private void btnAlterarProdutoActionPerformed(java.awt.event.ActionEvent evt) {
         try {

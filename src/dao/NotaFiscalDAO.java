@@ -22,7 +22,7 @@ public class NotaFiscalDAO {
             }
 
         } catch (SQLException e) {
-            System.out.println("Erro ao inserir NF: " + e.getMessage());
+            throw new RuntimeException("Erro ao inserir NF: " + e.getMessage(), e);
         }
 
         return -1;
@@ -39,7 +39,7 @@ public class NotaFiscalDAO {
             stmt.executeUpdate();
 
         } catch (SQLException e) {
-            System.out.println("Erro ao atualizar total da NF: " + e.getMessage());
+            throw new RuntimeException("Erro ao atualizar total da NF: " + e.getMessage(), e);
         }
     }
 }

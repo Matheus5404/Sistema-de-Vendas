@@ -19,7 +19,7 @@ public class ItemNotaFiscalDAO {
             stmt.executeUpdate();
 
         } catch (SQLException e) {
-            System.out.println("Erro ao inserir item da NF: " + e.getMessage());
+            throw new RuntimeException("Erro ao inserir item da NF: " + e.getMessage(), e);
         }
     }
 }

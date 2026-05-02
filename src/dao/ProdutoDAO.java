@@ -11,7 +11,7 @@ public class ProdutoDAO {
         String sql = "INSERT INTO produto(nome, valor) VALUES (?, ?)";
 
         try (Connection conn = Conexao.conectar();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, p.getNome());
             stmt.setDouble(2, p.getValor());
@@ -26,7 +26,7 @@ public class ProdutoDAO {
         String sql = "UPDATE produto SET nome = ?, valor = ? WHERE id = ?";
 
         try (Connection conn = Conexao.conectar();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, p.getNome());
             stmt.setDouble(2, p.getValor());
@@ -42,7 +42,7 @@ public class ProdutoDAO {
         String sql = "DELETE FROM produto WHERE id = ?";
 
         try (Connection conn = Conexao.conectar();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
             stmt.executeUpdate();
@@ -57,8 +57,8 @@ public class ProdutoDAO {
         String sql = "SELECT * FROM produto";
 
         try (Connection conn = Conexao.conectar();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 Produto p = new Produto();
@@ -80,7 +80,7 @@ public class ProdutoDAO {
         Produto p = null;
 
         try (Connection conn = Conexao.conectar();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();

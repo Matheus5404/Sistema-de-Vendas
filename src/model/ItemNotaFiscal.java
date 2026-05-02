@@ -1,6 +1,7 @@
 package model;
 
 public class ItemNotaFiscal {
+
     private int id;
     private int fkProd;
     private int fkNf;
@@ -66,5 +67,21 @@ public class ItemNotaFiscal {
 
     public void setSubtotal(double subtotal) {
         this.subtotal = subtotal;
+    }
+
+    public void setFkNotaFiscal(int nfAtual) {
+        this.fkNf = nfAtual;
+    }
+
+    public void setFkProduto(int idProduto) {
+        this.fkProd = idProduto;
+    }
+
+    public int getFkNotaFiscal() {
+        return fkNf;
+    }
+
+    public int getFkProduto() {
+        return fkProd;
     }
 }

@@ -1,5 +1,7 @@
 package dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import model.Cliente;
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,7 +13,7 @@ public class ClienteDAO {
         String sql = "INSERT INTO cliente(nome) VALUES (?)";
 
         try (Connection conn = Conexao.conectar();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, c.getNome());
             stmt.executeUpdate();
@@ -26,8 +28,8 @@ public class ClienteDAO {
         String sql = "SELECT * FROM cliente";
 
         try (Connection conn = Conexao.conectar();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 Cliente c = new Cliente();
@@ -41,5 +43,35 @@ public class ClienteDAO {
         }
 
         return lista;
+    }
+
+    public void alterar(Cliente c) {
+        String sql = "UPDATE cliente SET nome = ? WHERE id = ?";
+
+        try (Connection conn = Conexao.conectar();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, c.getNome());
+            stmt.setInt(2, c.getId());
+
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao alterar cliente: " + e.getMessage());
+        }
+    }
+
+    public void excluir(int id) {
+        String sql = "DELETE FROM cliente WHERE id = ?";
+
+        try (Connection conn = Conexao.conectar();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao excluir cliente: " + e.getMessage());
+        }
     }
 }
