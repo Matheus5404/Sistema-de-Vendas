@@ -15,7 +15,7 @@ Este projeto foi desenvolvido com o objetivo de aplicar conceitos de:
 
 Um sistema, no contexto da computação, é um conjunto de componentes interligados que trabalham juntos para atingir um objetivo comum :contentReference[oaicite:0]{index=0} — neste caso, o controle de vendas e emissão de notas fiscais.
 
-
+<img width="800" height="450" alt="VideoProject3-ezgif com-video-to-gif-converter" src="https://github.com/user-attachments/assets/06425f3b-f149-443a-9bbd-34e07a2edca7" />
 
 ---
 
