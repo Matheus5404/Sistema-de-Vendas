@@ -2,20 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/D:/Fatec%204%20Semestre/Java%20-%20Programação%20Orientado%20a%20Objetos/AULAS/SistemaVendas/src/model/NotaFiscal.java</file>
-            <file>file:/D:/Fatec%204%20Semestre/Java%20-%20Programação%20Orientado%20a%20Objetos/AULAS/SistemaVendas/src/view/FrmNotaFiscal.java</file>
-            <file>file:/D:/Fatec%204%20Semestre/Java%20-%20Programação%20Orientado%20a%20Objetos/AULAS/SistemaVendas/src/view/FrmCliente.java</file>
-            <file>file:/D:/Fatec%204%20Semestre/Java%20-%20Programação%20Orientado%20a%20Objetos/AULAS/SistemaVendas/src/dao/Conexao.java</file>
-            <file>file:/D:/Fatec%204%20Semestre/Java%20-%20Programação%20Orientado%20a%20Objetos/AULAS/SistemaVendas/src/model/ItemNotaFiscal.java</file>
-            <file>file:/D:/Fatec%204%20Semestre/Java%20-%20Programação%20Orientado%20a%20Objetos/AULAS/SistemaVendas/src/view/FrmConsultas.java</file>
-            <file>file:/D:/Fatec%204%20Semestre/Java%20-%20Programação%20Orientado%20a%20Objetos/AULAS/SistemaVendas/src/dao/NotaFiscalDAO.java</file>
-            <file>file:/D:/Fatec%204%20Semestre/Java%20-%20Programação%20Orientado%20a%20Objetos/AULAS/SistemaVendas/src/dao/ClienteDAO.java</file>
-            <file>file:/D:/Fatec%204%20Semestre/Java%20-%20Programação%20Orientado%20a%20Objetos/AULAS/SistemaVendas/src/dao/ItemNotaFiscalDAO.java</file>
-            <file>file:/D:/Fatec%204%20Semestre/Java%20-%20Programação%20Orientado%20a%20Objetos/AULAS/SistemaVendas/src/dao/ProdutoDAO.java</file>
-            <file>file:/D:/Fatec%204%20Semestre/Java%20-%20Programação%20Orientado%20a%20Objetos/AULAS/SistemaVendas/src/model/Cliente.java</file>
-            <file>file:/D:/Fatec%204%20Semestre/Java%20-%20Programação%20Orientado%20a%20Objetos/AULAS/SistemaVendas/src/view/TelaPrincipal.java</file>
-            <file>file:/D:/Fatec%204%20Semestre/Java%20-%20Programação%20Orientado%20a%20Objetos/AULAS/SistemaVendas/src/util/RelatorioPDF.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

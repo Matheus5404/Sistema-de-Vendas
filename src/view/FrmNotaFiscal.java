@@ -54,6 +54,7 @@ public class FrmNotaFiscal extends javax.swing.JFrame {
         txtComboProduto = new javax.swing.JComboBox<>();
         txtDataEmissao = new javax.swing.JFormattedTextField();
         lblMensagem = new javax.swing.JLabel();
+        btnVoltar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -151,17 +152,22 @@ public class FrmNotaFiscal extends javax.swing.JFrame {
 
         txtDataEmissao.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter()));
 
+        btnVoltar.setText("Voltar");
+        btnVoltar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVoltarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1)
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
                             .addComponent(jLabel2)
@@ -190,26 +196,25 @@ public class FrmNotaFiscal extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(txtValorUnitario, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(54, 54, 54))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(btnCriarNF)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnAdicionarItem)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnfinalizarNF)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnImprimirNf)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 166, Short.MAX_VALUE)
+                        .addComponent(btnVoltar))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel10)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnCriarNF)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnAdicionarItem)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnfinalizarNF)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnImprimirNf)))
-                        .addGap(0, 256, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel1))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lblMensagem)
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(lblMensagem))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(23, 23, 23))
         );
         layout.setVerticalGroup(
@@ -254,7 +259,8 @@ public class FrmNotaFiscal extends javax.swing.JFrame {
                     .addComponent(btnCriarNF)
                     .addComponent(btnAdicionarItem)
                     .addComponent(btnfinalizarNF)
-                    .addComponent(btnImprimirNf))
+                    .addComponent(btnImprimirNf)
+                    .addComponent(btnVoltar))
                 .addContainerGap(55, Short.MAX_VALUE))
         );
 
@@ -556,6 +562,10 @@ public class FrmNotaFiscal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnImprimirNfActionPerformed
 
+    private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
+        dispose();
+    }//GEN-LAST:event_btnVoltarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -595,6 +605,7 @@ public class FrmNotaFiscal extends javax.swing.JFrame {
     private javax.swing.JButton btnAdicionarItem;
     private javax.swing.JButton btnCriarNF;
     private javax.swing.JButton btnImprimirNf;
+    private javax.swing.JButton btnVoltar;
     private javax.swing.JButton btnfinalizarNF;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
